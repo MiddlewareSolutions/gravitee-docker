@@ -13,7 +13,7 @@
 FROM graviteeio/java:8
 MAINTAINER Gravitee Team <http://gravitee.io>
 
-ARG GRAVITEEIO_VERSION=0
+ARG GRAVITEEIO_VERSION=1.10.4
 
 # Update to get support for Zip/Unzip, nc and wget
 RUN apk add --update zip unzip netcat-openbsd wget
@@ -26,10 +26,16 @@ RUN wget https://download.gravitee.io/graviteeio-apim/distributions/graviteeio-f
 ENV GRAVITEEIO_HOME /opt/graviteeio-management-api
 WORKDIR ${GRAVITEEIO_HOME}
 
+COPY config/gravitee.yml ${GRAVITEEIO_HOME}/config/
+
 ENV GRAVITEEIO_MONGODB_HOST localhost
 ENV GRAVITEEIO_MONGODB_PORT 27017
 ENV GRAVITEEIO_ELASTIC_HOST localhost
 ENV GRAVITEEIO_ELASTIC_PORT 9300
+
+ENV GRAVITEEIO_PORTAL_URL http://localhost:80
+ENV GIO_MIN_MEM 1g
+ENV GIO_MAX_MEM 2g
 
 EXPOSE 8083
 VOLUME ["/opt/graviteeio-management-api/logs"]

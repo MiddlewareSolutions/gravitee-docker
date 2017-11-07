@@ -13,16 +13,16 @@
 FROM nginx:1.10.2-alpine
 MAINTAINER Gravitee Team <http://gravitee.io>
 
-ARG GRAVITEEIO_VERSION=0
+ARG GRAVITEEIO_VERSION=1.10.4
 
-COPY files/entrypoint.sh /usr/local/bin/
-RUN chmod u+x /usr/local/bin/entrypoint.sh
+COPY files/*.sh /usr/local/bin/
+RUN chmod u+x /usr/local/bin/*.sh
 
 # Update to get support for Zip/Unzip, Bash
 RUN apk --update add zip unzip bash wget
 
 ENV WWW_TARGET /var/www/html/
-COPY files/mysite.template /etc/nginx/conf.d/default.conf
+COPY nginx/default.conf /etc/nginx/conf.d/default.conf
 
 RUN wget https://download.gravitee.io/graviteeio-apim/distributions/graviteeio-full-${GRAVITEEIO_VERSION}.zip --no-check-certificate -P /tmp/ \
     && unzip /tmp/graviteeio-full-${GRAVITEEIO_VERSION}.zip -d /tmp/ \
@@ -30,14 +30,16 @@ RUN wget https://download.gravitee.io/graviteeio-apim/distributions/graviteeio-f
     && mv /tmp/graviteeio-full-${GRAVITEEIO_VERSION}/graviteeio-management-ui*/* ${WWW_TARGET} \
     && rm -rf /tmp/*
 
-ENV MGMT_API_URL http://localhost/management/
+
+ENV MGMT_API_URL http://managementapi-gravitee.minishift.local/management/
 
 RUN cp /var/www/html/constants.json /var/www/html/constants.json.template
+COPY html/constants.json /var/www/html/constants.json
 
 # forward request and error logs to docker log collector
 #RUN ln -sf /dev/stdout /var/log/nginx/access.log \
 #	&& ln -sf /dev/stderr /var/log/nginx/error.log
 
 EXPOSE 80 443
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+#ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 CMD ["nginx", "-g", "daemon off;"]
