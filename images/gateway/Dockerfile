@@ -13,7 +13,7 @@
 FROM graviteeio/java:8
 MAINTAINER Gravitee Team <http://gravitee.io>
 
-ARG GRAVITEEIO_VERSION=1.10.4
+ARG GRAVITEEIO_VERSION=0
 
 # Update to get support for Zip/Unzip, nc and wget
 RUN apk add --update zip unzip netcat-openbsd wget

@@ -13,7 +13,7 @@
 FROM nginx:1.10.2-alpine
 MAINTAINER Gravitee Team <http://gravitee.io>
 
-ARG GRAVITEEIO_VERSION=1.10.4
+ARG GRAVITEEIO_VERSION=0
 
 COPY files/*.sh /usr/local/bin/
 RUN chmod u+x /usr/local/bin/*.sh

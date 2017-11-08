@@ -92,7 +92,7 @@ objects:
             value: elasticsearch
           - name: GRAVITEEIO_MONGODB_HOST
             value: mongodb
-          image: ${NAMESPACE}/gateway:latest
+          image: ${NAMESPACE}/gateway:${GRAVITEE_VERSION}
           imagePullPolicy: Always
           name: gateway
           ports:
@@ -115,7 +115,7 @@ objects:
         - gateway
         from:
           kind: ImageStreamTag
-          name: 'gateway:latest'
+          name: 'gateway:${GRAVITEE_VERSION}'
           namespace: ${NAMESPACE}
       type: ImageChange
   status: {}
@@ -159,7 +159,7 @@ objects:
             value: 512m
           - name: GRAVITEEIO_PORTAL_URL
             value: http://managementui-${NAMESPACE}.${OPENSHIFT_SUFFIXE}
-          image: management-api:latest
+          image: management-api:${GRAVITEE_VERSION}
           imagePullPolicy: Always
           name: managementapi
           ports:
@@ -182,7 +182,7 @@ objects:
         - managementapi
         from:
           kind: ImageStreamTag
-          name: 'management-api:latest'
+          name: 'management-api:${GRAVITEE_VERSION}'
           namespace: ${NAMESPACE}
       type: ImageChange
   status: {}
@@ -218,7 +218,7 @@ objects:
         - env:
           - name: MGMT_API_URL
             value: http://managementapi-${NAMESPACE}.${OPENSHIFT_SUFFIXE}/management/
-          image: management-ui:latest
+          image: management-ui:${GRAVITEE_VERSION}
           imagePullPolicy: Always
           name: managementui
           ports:
@@ -241,7 +241,7 @@ objects:
         - managementui
         from:
           kind: ImageStreamTag
-          name: 'management-ui:latest'
+          name: 'management-ui:${GRAVITEE_VERSION}'
           namespace: ${NAMESPACE}
       type: ImageChange
   status: {}
@@ -468,6 +468,10 @@ parameters:
   - name: NAMESPACE 
     description: Name of Project
     value: gravitee
+    required: true 
+  - name: GRAVITEE_VERSION 
+    description: Verion of gravitee to deploy
+    value: 1.10.4
     required: true 
   - name: OPENSHIFT_SUFFIXE
     description: Base of web access for openshift 
